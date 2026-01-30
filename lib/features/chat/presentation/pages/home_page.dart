@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (BuildContext context, AuthState state){
               if(state is AuthAllUser){
                 return TabBarView(children: [
-                  ContactList(list: state.list, user: widget.user,),
+                  ContactList(newList: state.list, user: widget.user,),
                   const Center(child: Text("Status Screen", style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 40,

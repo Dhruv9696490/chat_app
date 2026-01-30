@@ -190,15 +190,17 @@ class _ChatPageState extends State<ChatPage> {
                     Expanded(
                       child: TextField(
                         controller: _controller,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'Type your message...',
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
                         ),
                       ),
                     ),
                     IconButton(
                       onPressed: sendMessage,
-                      icon: const Icon(Icons.send),
+                      icon: const Icon(Icons.send,size: 37,),
                     ),
                   ],
                 ),

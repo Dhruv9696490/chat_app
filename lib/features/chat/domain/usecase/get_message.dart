@@ -6,7 +6,7 @@ class GetMessages {
 
   GetMessages(this.repository);
 
-  Stream<List<Message>> call(String currentUserId, String receiverId) {
+  Stream<List<Message>> call(String currentUserId, String receiverId){
     return repository.getMessages(currentUserId, receiverId);
   }
 }

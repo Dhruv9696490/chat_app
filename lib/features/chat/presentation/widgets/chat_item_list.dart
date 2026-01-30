@@ -6,13 +6,14 @@ import '../../../../core/theme/app_pallete.dart';
 import '../../../../info.dart';
 
 class ContactList extends StatelessWidget {
-  final List<User> list;
+  final List<User> newList;
   final User user;
 
-  const ContactList({super.key, required this.list, required this.user});
+  const ContactList({super.key, required this.newList, required this.user});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
+    final list = newList;
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: ListView.builder(
@@ -32,7 +33,7 @@ class ContactList extends StatelessWidget {
                       user.uid,
                       receiver.uid,
                       receiver.name ?? "Name",
-                      info[index]['profilePic'] ?? "",
+                      info[index % info.length]['profilePic'] ?? "",
                     ),
                   );
                 },
@@ -41,7 +42,7 @@ class ContactList extends StatelessWidget {
                   child: ListTile(
                     leading: CircleAvatar(
                       backgroundImage: NetworkImage(
-                        info[index]['profilePic'].toString(),
+                        info[index % info.length]['profilePic'].toString(),
                       ),
                       radius: 30,
                     ),
@@ -54,7 +55,7 @@ class ContactList extends StatelessWidget {
                     subtitle: Padding(
                       padding: EdgeInsets.only(top: 6),
                       child: Text(
-                        info[index]['message'].toString(),
+                        info[index % info.length]['message'].toString(),
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -62,7 +63,7 @@ class ContactList extends StatelessWidget {
                       ),
                     ),
                     trailing: Text(
-                      info[index]['time'].toString(),
+                      info[index % info.length]['time'].toString(),
                       style: TextStyle(
                         fontSize: 13,
                         color: Colors.grey,

@@ -4,13 +4,11 @@ import '../../domain/entities/messages.dart';
 
 abstract interface class ChatRemoteDataSource {
   Future<void> sendMessage(Message message);
-
   Stream<List<Message>> getMessages(String currentUserId, String receiverId);
 }
 
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   final FirebaseFirestore firestore;
-
   ChatRemoteDataSourceImpl(this.firestore);
 
   @override
