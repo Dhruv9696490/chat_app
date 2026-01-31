@@ -1,18 +1,20 @@
-import 'package:chat_app/features/auth/domain/entities/user.dart';
+import 'package:chat_app/core/cubit/currentUser/current_user_cubit.dart';
+import 'package:chat_app/core/entities/user.dart';
 import 'package:chat_app/features/chat/presentation/pages/chat_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../info.dart';
 
 class ContactList extends StatelessWidget {
   final List<User> newList;
-  final User user;
 
-  const ContactList({super.key, required this.newList, required this.user});
+  const ContactList({super.key, required this.newList});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
+    final user = (context.read<CurrentUserCubit>().state as CurrentUserLoggedIn).user;
     final list = newList;
     return Padding(
       padding: const EdgeInsets.only(top: 10),
@@ -20,6 +22,7 @@ class ContactList extends StatelessWidget {
         shrinkWrap: true,
         itemCount: list.length,
         itemBuilder: (context, index) {
+          
           final item = list[index];
           return Column(
             children: [
@@ -32,7 +35,7 @@ class ContactList extends StatelessWidget {
                       user,
                       user.uid,
                       receiver.uid,
-                      receiver.name ?? "Name",
+                      receiver.name,
                       info[index % info.length]['profilePic'] ?? "",
                     ),
                   );
@@ -48,8 +51,8 @@ class ContactList extends StatelessWidget {
                     ),
                     title: Text(
                       !(user.uid == item.uid)
-                          ? item.name?.toUpperCase() ?? "Name"
-                          : "You",
+                          ? item.name.toUpperCase() 
+                          : "${user.name} (You)",
                       style: TextStyle(fontSize: 18),
                     ),
                     subtitle: Padding(

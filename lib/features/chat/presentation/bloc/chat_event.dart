@@ -4,7 +4,6 @@ abstract class ChatEvent {}
 
 class SendMessageEvent extends ChatEvent {
   final Message message;
-
   SendMessageEvent(this.message);
 }
 

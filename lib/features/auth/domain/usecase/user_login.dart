@@ -1,6 +1,6 @@
 import 'package:chat_app/core/error/failure.dart';
 import 'package:chat_app/core/usecase/usecase.dart';
-import 'package:chat_app/features/auth/domain/entities/user.dart';
+import 'package:chat_app/core/entities/user.dart';
 import 'package:chat_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 

@@ -6,7 +6,6 @@ import '../repository/chat_repository.dart';
 
 class SendMessage implements UseCase<void, Message> {
   final ChatRepository repository;
-
   SendMessage(this.repository);
 
   @override

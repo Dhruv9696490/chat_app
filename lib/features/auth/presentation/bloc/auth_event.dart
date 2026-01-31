@@ -22,4 +22,3 @@ class AuthSignOut extends AuthEvent {}
 
 class AuthGetCurrentUser extends AuthEvent {}
 
-class AuthGetAllUser extends AuthEvent {}

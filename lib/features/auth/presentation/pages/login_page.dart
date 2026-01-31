@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/utils/loadingIndicator.dart';
 import '../../../../core/utils/snack_bar.dart';
-import '../../../chat/presentation/pages/home_page.dart';
+import '../../../users/presentation/pages/users_page.dart';
 
 class LoginPage extends StatefulWidget {
   static route() => MaterialPageRoute(
@@ -28,11 +28,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   bool isObscure = true;
 
-  @override
-  void initState() {
-    BlocProvider.of<AuthBloc>(context).add(AuthGetCurrentUser());
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -48,13 +43,14 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-            Navigator.pushReplacement(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
                 builder: (_) {
-                  return HomeScreen(user: state.user);
+                  return UsersScreen(user: state.user);
                 },
               ),
+              (_) => false,
             );
           }
           if (state is AuthFailure) {
@@ -134,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                               onPressed: () {
                                 if (emailController.text.isNotEmpty &&
                                     passwordController.text.isNotEmpty) {
-                                  BlocProvider.of<AuthBloc>(context).add(
+                                  context.read<AuthBloc>().add(
                                     AuthLogin(
                                       email: emailController.text.trim(),
                                       password: passwordController.text.trim(),
@@ -156,7 +152,11 @@ class _LoginPageState extends State<LoginPage> {
                               const Text("Don't have an account?"),
                               TextButton(
                                 onPressed: () {
-                                  Navigator.push(context, SignUpPage.route());
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    SignUpPage.route(),
+                                    (route) => false,
+                                  );
                                 },
                                 child: const Text(
                                   "Sign Up",
@@ -178,4 +178,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-

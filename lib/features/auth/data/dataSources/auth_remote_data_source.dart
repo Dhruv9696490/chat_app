@@ -1,26 +1,20 @@
 import 'package:chat_app/core/error/exception.dart';
+import 'package:chat_app/features/auth/data/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import '../../domain/entities/user.dart';
-import 'package:firebase_auth/firebase_auth.dart' hide User;
+import 'package:firebase_auth/firebase_auth.dart';
 
 abstract interface class AuthRemoteDataSource {
-  Future<UserCredential> signUp({
+  Future<UserModel> signUp({
     required String email,
     required String password,
     required String name,
   });
 
-  Future<UserCredential> signIn({
-    required String email,
-    required String password,
-  });
+  Future<UserModel> signIn({required String email, required String password});
 
   Future<void> signOut();
 
-  Future<User?> getCurrentUserData();
-
-  Future<List<User>> getAllUsers();
+  Future<UserModel?> getCurrentUserData();
 }
 
 class AuthRemoteDataSourceImple implements AuthRemoteDataSource {
@@ -30,7 +24,7 @@ class AuthRemoteDataSourceImple implements AuthRemoteDataSource {
   AuthRemoteDataSourceImple({required this.auth, required this.firestore});
 
   @override
-  Future<UserCredential> signUp({
+  Future<UserModel> signUp({
     required String email,
     required String password,
     required String name,
@@ -41,21 +35,21 @@ class AuthRemoteDataSourceImple implements AuthRemoteDataSource {
         password: password,
       );
       if (userCredential.user == null) {
-        throw ServerException("user is empty");
+        throw ServerException("User Is Not Logged IN");
       }
       await firestore.collection('users').doc(userCredential.user!.uid).set({
         'name': name,
         'email': email,
         'uid': userCredential.user!.uid,
       });
-      return userCredential;
+      return UserModel(uid: userCredential.user!.uid, email: email, name: name);
     } catch (e) {
       throw ServerException(e.toString());
     }
   }
 
   @override
-  Future<UserCredential> signIn({
+  Future<UserModel> signIn({
     required String email,
     required String password,
   }) async {
@@ -65,9 +59,18 @@ class AuthRemoteDataSourceImple implements AuthRemoteDataSource {
         password: password,
       );
       if (userCredential.user == null) {
-        throw ServerException("user is empty");
+        throw ServerException("User can't login");
       }
-      return userCredential;
+      final userDoc = await firestore
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .get();
+
+      return UserModel(
+        uid: userCredential.user!.uid,
+        email: email,
+        name: userDoc.data()?['name'] ?? "not found",
+      );
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -79,32 +82,21 @@ class AuthRemoteDataSourceImple implements AuthRemoteDataSource {
   }
 
   @override
-  Future<User?> getCurrentUserData() async {
+  Future<UserModel?> getCurrentUserData() async {
     try {
       final user = auth.currentUser;
-      final userName = await firestore.collection('users').doc(user?.uid).get();
-      if (!userName.exists) {
-        return null;
-      }
       if (user == null) {
         return null;
-      } else {
-        return User(
-          uid: user.uid,
-          email: user.email ?? "",
-          name: userName.data()!['name'],
-        );
       }
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
-  }
-
-  @override
-  Future<List<User>> getAllUsers() async {
-    try {
-      final snapshot = await firestore.collection('users').get();
-      return snapshot.docs.map((doc) => User.fromJson(doc.data())).toList();
+      final userDoc = await firestore.collection('users').doc(user.uid).get();
+      if (userDoc.data() == null) {
+        return null;
+      }
+      return UserModel(
+        uid: user.uid,
+        email: user.email ?? "",
+        name: userDoc.data()?['name'] ?? "not found",
+      );
     } catch (e) {
       throw ServerException(e.toString());
     }

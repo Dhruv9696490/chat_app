@@ -12,19 +12,4 @@ class Message {
     required this.text,
     required this.timestamp,
   });
-
-  Map<String, dynamic> toMap() => {
-    'senderId': senderId,
-    'receiverId': receiverId,
-    'text': text,
-    'timestamp': timestamp.millisecondsSinceEpoch,
-  };
-
-  factory Message.fromMap(Map<String, dynamic> map, String id) => Message(
-    id: id,
-    senderId: map['senderId'],
-    receiverId: map['receiverId'],
-    text: map['text'],
-    timestamp: DateTime.fromMillisecondsSinceEpoch(map['timestamp']),
-  );
 }

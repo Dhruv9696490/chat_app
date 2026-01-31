@@ -1,3 +1,6 @@
+import 'package:chat_app/core/error/failure.dart';
+import 'package:fpdart/fpdart.dart';
+
 import '../entities/messages.dart';
 import '../repository/chat_repository.dart';
 
@@ -6,7 +9,7 @@ class GetMessages {
 
   GetMessages(this.repository);
 
-  Stream<List<Message>> call(String currentUserId, String receiverId){
+  Either<Failure,Stream<List<Message>>> call(String currentUserId, String receiverId){
     return repository.getMessages(currentUserId, receiverId);
   }
 }

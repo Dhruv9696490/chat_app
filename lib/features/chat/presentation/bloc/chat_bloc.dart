@@ -1,3 +1,5 @@
+import 'package:chat_app/core/error/failure.dart';
+import 'package:chat_app/info.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/messages.dart';
 import '../../domain/usecase/get_message.dart';
@@ -23,7 +25,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<GetMessagesEvent>((event, emit) async {
       emit(ChatLoading());
       final stream = _getMessages(event.currentUserId, event.receiverId);
-      await emit.forEach(stream, onData: (messages) => ChatLoaded(messages));
+      stream.fold((l)=> emit(ChatError(l.error)) , (r){
+        emit.forEach(r, onData: (messages)=> ChatLoaded(messages) );
+      });
     });
   }
 }

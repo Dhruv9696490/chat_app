@@ -4,7 +4,7 @@ import 'package:chat_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chat_app/features/auth/presentation/pages/login_page.dart';
 import 'package:chat_app/features/auth/presentation/widgets/gradient_button.dart';
 import 'package:chat_app/features/auth/presentation/widgets/text_field.dart';
-import 'package:chat_app/features/chat/presentation/pages/home_page.dart';
+import 'package:chat_app/features/users/presentation/pages/users_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,13 +41,14 @@ class _SignUpPageState extends State<SignUpPage> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-            Navigator.pushReplacement(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
                 builder: (_) {
-                  return HomeScreen(user: state.user);
+                  return UsersScreen(user: state.user);
                 },
               ),
+              (route) => false,
             );
           }
           if (state is AuthFailure) {
