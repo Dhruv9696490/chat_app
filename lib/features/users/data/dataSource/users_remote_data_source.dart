@@ -2,11 +2,11 @@ import 'package:chat_app/core/error/exception.dart';
 import 'package:chat_app/features/users/data/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-abstract interface class UserRemoteDataSource {
+abstract interface class UsersRemoteDataSource {
   Future<List<UserModel>> getAllUsers();
 }
 
-class UserRemoteDataSourceImple implements UserRemoteDataSource {
+class UserRemoteDataSourceImple implements UsersRemoteDataSource {
   final FirebaseFirestore firestore;
   UserRemoteDataSourceImple({required this.firestore});
   @override

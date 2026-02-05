@@ -1,4 +1,5 @@
-import 'package:chat_app/core/utils/loadingIndicator.dart';
+import 'package:chat_app/core/theme/app_pallete.dart';
+import 'package:chat_app/core/utils/loading_indicator.dart';
 import 'package:chat_app/core/utils/snack_bar.dart';
 import 'package:chat_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chat_app/features/auth/presentation/pages/login_page.dart';
@@ -11,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SignUpPage extends StatefulWidget {
   static route() => MaterialPageRoute(
     builder: (_) {
-      return SignUpPage();
+      return const SignUpPage();
     },
   );
 
@@ -57,12 +58,12 @@ class _SignUpPageState extends State<SignUpPage> {
         },
         builder: (context, state) {
           if (state is AuthLoading) {
-            return LoadingIndicator();
+            return const LoadingIndicator();
           }
           return Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF43e97b), Color(0xFF38f9d7)],
+                colors: [AppPallete.messageColor, AppPallete.tabColor],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -74,33 +75,36 @@ class _SignUpPageState extends State<SignUpPage> {
                   vertical: 32,
                 ),
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 500),
+                  constraints: const BoxConstraints(maxWidth: 500),
                   child: Card(
+                    color: const Color.fromRGBO(237, 236, 236, 1),
                     elevation: 12,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(24.0),
+                      padding: const EdgeInsets.all(20.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Text(
-                            "Create Account ✨",
+                            "Create Account",
                             style: TextStyle(
-                              fontSize: 28,
+                              color: Colors.black,
+                              fontSize: 32,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 1),
                           Text(
                             "Sign up to get started",
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 20,
                               color: Colors.grey[700],
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 32),
+                          const SizedBox(height: 12),
                           AuthTextField(
                             controller: nameController,
                             icon: Icons.person_outline,
@@ -120,12 +124,13 @@ class _SignUpPageState extends State<SignUpPage> {
                             icon: Icons.lock_outline,
                             label: 'Password',
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 16),
                           SizedBox(
+                            height: 55,
                             width: double.infinity,
                             child: GradientButton(
                               title: 'Sign Up',
-                              color: 0xFF43e97b,
+                              color: AppPallete.messageColor,
                               onPressed: () {
                                 if (emailController.text.isNotEmpty &&
                                     passwordController.text.isNotEmpty &&
@@ -146,18 +151,27 @@ class _SignUpPageState extends State<SignUpPage> {
                               },
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text("Already have an account?"),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(context, LoginPage.route());
-                                },
-                                child: const Text(
-                                  "Sign In",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                              const Text(
+                                "Already have an account?",
+                                style: TextStyle(color: Colors.black,fontSize: 17),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: GestureDetector(
+                                  onTap: ()=> Navigator.pushAndRemoveUntil(context, LoginPage.route(),(_)=> false),
+                                  child:const Text(
+                                      "Log In",
+                                      style: TextStyle(
+                                        color: AppPallete.messageColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                      ),
+                                   
+                                  ),
                                 ),
                               ),
                             ],

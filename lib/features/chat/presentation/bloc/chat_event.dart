@@ -6,6 +6,10 @@ class SendMessageEvent extends ChatEvent {
   final Message message;
   SendMessageEvent(this.message);
 }
+class DeleteMessageEvent extends ChatEvent {
+  final Message message;
+  DeleteMessageEvent(this.message);
+}
 
 class GetMessagesEvent extends ChatEvent {
   final String currentUserId;

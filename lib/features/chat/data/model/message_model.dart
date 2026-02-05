@@ -8,18 +8,24 @@ class MessageModel extends Message {
     required super.text,
     required super.timestamp,
   });
-  Map<String, dynamic> toJson() => {
+  Map<dynamic, dynamic> toJson() => {
     'senderId': senderId,
     'receiverId': receiverId,
     'text': text,
     'timestamp': timestamp.millisecondsSinceEpoch,
   };
-
-  factory MessageModel.fromJson(Map<String, dynamic> map, String id) => MessageModel(
-    id: id,
-    senderId: map['senderId'],
-    receiverId: map['receiverId'],
-    text: map['text'],
+Map<dynamic, dynamic> toJsonForHive() => {
+    'id': id,
+    'senderId': senderId,
+    'receiverId': receiverId,
+    'text': text,
+    'timestamp': timestamp.millisecondsSinceEpoch,
+  };
+  factory MessageModel.fromJson(Map<dynamic, dynamic> map, String? id) => MessageModel(
+    id: id ?? map['id'] ?? '',
+    senderId: map['senderId'] ?? '',
+    receiverId: map['receiverId'] ?? '',
+    text: map['text'] ?? '',
     timestamp: DateTime.fromMillisecondsSinceEpoch(map['timestamp']),
   );
 }

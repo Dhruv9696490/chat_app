@@ -1,3 +1,4 @@
+import 'package:chat_app/core/theme/app_pallete.dart';
 import 'package:chat_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chat_app/features/auth/presentation/pages/sign_up_page.dart';
 import 'package:chat_app/features/auth/presentation/widgets/gradient_button.dart';
@@ -6,14 +7,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/utils/loadingIndicator.dart';
+import '../../../../core/utils/loading_indicator.dart';
 import '../../../../core/utils/snack_bar.dart';
 import '../../../users/presentation/pages/users_page.dart';
 
 class LoginPage extends StatefulWidget {
   static route() => MaterialPageRoute(
     builder: (_) {
-      return LoginPage();
+      return const LoginPage();
     },
   );
 
@@ -28,7 +29,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   bool isObscure = true;
 
-
   @override
   void dispose() {
     emailController.dispose();
@@ -38,7 +38,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -62,14 +61,14 @@ class _LoginPageState extends State<LoginPage> {
         },
         builder: (context, state) {
           if (state is AuthLoading) {
-            return LoadingIndicator();
+            return const LoadingIndicator();
           }
           return Container(
-            height: size.height,
-            width: size.width,
+            height: double.infinity,
+            width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF4facfe), Color(0xFF00f2fe)],
+                colors: [AppPallete.messageColor, AppPallete.tabColor],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -78,12 +77,13 @@ class _LoginPageState extends State<LoginPage> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
-                  vertical: 32,
+                  vertical: 24,
                 ),
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 500),
+                  constraints:const BoxConstraints(maxWidth: 500),
                   child: Card(
-                    elevation: 12,
+                    color: const Color.fromRGBO(237, 236, 236, 1),
+                    elevation: 16,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
@@ -93,21 +93,23 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Text(
-                            "Welcome Back 👋",
+                            "Welcome Back",
                             style: TextStyle(
-                              fontSize: 28,
+                              color: Colors.black,
+                              fontSize: 32,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 1),
                           Text(
                             "Login to continue",
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 20,
                               color: Colors.grey[700],
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 32),
+                          const SizedBox(height: 12),
                           AuthTextField(
                             controller: emailController,
                             icon: Icons.email_outlined,
@@ -123,10 +125,11 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           const SizedBox(height: 16),
                           SizedBox(
+                            height: 55,
                             width: double.infinity,
                             child: GradientButton(
                               title: 'Login',
-                              color: 0xFF4facfe,
+                              color: AppPallete.messageColor,
                               onPressed: () {
                                 if (emailController.text.isNotEmpty &&
                                     passwordController.text.isNotEmpty) {
@@ -139,28 +142,33 @@ class _LoginPageState extends State<LoginPage> {
                                 } else {
                                   showSnackBar(
                                     context,
-                                    'please enter all fields',
+                                    'Please enter all above fields',
                                   );
                                 }
                               },
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text("Don't have an account?"),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    SignUpPage.route(),
-                                    (route) => false,
-                                  );
-                                },
-                                child: const Text(
-                                  "Sign Up",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                              const Text(
+                                "Don't have an account?",
+                                style: TextStyle(color: Colors.black,fontSize: 17),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: GestureDetector(
+                                  onTap: ()=> Navigator.pushAndRemoveUntil(context, SignUpPage.route(),(_)=> false),
+                                  child: const Text(
+                                      "Sign Up",
+                                      style: TextStyle(
+                                        color: AppPallete.messageColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                      ),
+                                   
+                                  ),
                                 ),
                               ),
                             ],

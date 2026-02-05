@@ -1,3 +1,4 @@
+import 'package:chat_app/core/cubit/currentTheme/theme_cubit.dart';
 import 'package:chat_app/core/entities/user.dart';
 import 'package:chat_app/core/utils/snack_bar.dart';
 import 'package:chat_app/features/chat/presentation/widgets/chat_app_bar.dart';
@@ -78,14 +79,23 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.read<ThemeCubit>().state.isDark;
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            ChatAppBar(url: widget.url, receiverName: widget.receiverName),
-            ChatBox(currentUserId: widget.currentUserId),
-            ChatField(controller: _controller, onPressed: sendMessage)
-          ],
+      appBar: ChatAppBar(url: widget.url, receiverName: widget.receiverName, receiverUid: widget.receiverId,),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: isDark ? const AssetImage('assets/images/whatsapp_black_background.png') : const AssetImage('assets/images/whatsapp_white_background.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              ChatBox(currentUserId: widget.currentUserId),
+              ChatField(controller: _controller, onSend: sendMessage),
+            ],
+          ),
         ),
       ),
     );

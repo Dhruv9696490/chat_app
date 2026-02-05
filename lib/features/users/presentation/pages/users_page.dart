@@ -1,6 +1,7 @@
+import 'package:chat_app/core/cubit/currentTheme/theme_cubit.dart';
 import 'package:chat_app/core/cubit/currentUser/current_user_cubit.dart';
 import 'package:chat_app/core/theme/app_pallete.dart';
-import 'package:chat_app/core/utils/loadingIndicator.dart';
+import 'package:chat_app/core/utils/loading_indicator.dart';
 import 'package:chat_app/core/entities/user.dart';
 import 'package:chat_app/core/utils/snack_bar.dart';
 import 'package:chat_app/features/auth/presentation/bloc/auth_bloc.dart';
@@ -12,7 +13,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/chat_item_list.dart';
 
 class UsersScreen extends StatefulWidget {
-  static route(User user1) => MaterialPageRoute(builder: (_) => UsersScreen(user: user1));
+  static route(User user1) =>
+      MaterialPageRoute(builder: (_) => UsersScreen(user: user1));
 
   final User user;
   const UsersScreen({super.key, required this.user});
@@ -29,7 +31,8 @@ class _UsersScreenState extends State<UsersScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
+    final isDark = context.read<ThemeCubit>().state.isDark;
     return BlocListener<CurrentUserCubit, CurrentUserState>(
       listener: (context, state) {
         if (state is CurrentUserLoggedOut) {
@@ -50,45 +53,76 @@ class _UsersScreenState extends State<UsersScreen> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            automaticallyImplyLeading: false,
-            elevation: 0,
-            backgroundColor: AppPallete.appBarColor,
-            title: const Text(
-              "Chat App",
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.grey,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            automaticallyImplyLeading: true,
+            title: const Text("WhatsApp"),
             actions: [
-              IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.search,
+                  color: AppPallete.whiteColor,
+                  size: 25,
+                ),
+              ),
               PopupMenuButton(
+                iconSize: 25,
+                iconColor: AppPallete.whiteColor,
+                menuPadding: const EdgeInsets.all(0),
                 onSelected: (value) {
                   if (value == 'LOGOUT') {
-                    // BlocProvider.of<AuthBloc>(context).add(AuthSignOut());
                     context.read<AuthBloc>().add(AuthSignOut());
+                  }
+                  if (value == 'THEME') {
+                    context.read<ThemeCubit>().changeTheme();
                   }
                 },
                 itemBuilder: (context) {
                   return [
-                    PopupMenuItem(value: 'SETTING', child: Text("Setting")),
-                    PopupMenuItem(value: 'LOGOUT', child: Text("Logout")),
+                    const PopupMenuItem(
+                      value: 'SETTING',
+                      child: Row(
+                        children: [
+                          Icon(Icons.settings),
+                          SizedBox(width: 8),
+                          Text("Setting"),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'THEME',
+                      child: Row(
+                        children: [
+                          !isDark
+                              ? const Icon(Icons.dark_mode_outlined)
+                              : const Icon(Icons.sunny),
+                          const SizedBox(width: 8),
+                          !isDark
+                              ? const Text("Dark Mode")
+                              : const Text("Light Mode"),
+                        ],
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: 'LOGOUT',
+                      child: Row(
+                        children: [
+                          Icon(Icons.logout),
+                          SizedBox(width: 8),
+                          Text("Logout"),
+                        ],
+                      ),
+                    ),
                   ];
                 },
               ),
             ],
-            bottom: TabBar(
+            bottom: const TabBar(
               tabs: [
-                Tab(text: 'Home'),
+                Tab(text: 'HOME'),
                 Tab(text: 'STATUS'),
                 Tab(text: 'CALL'),
               ],
               indicatorWeight: 4,
-              labelStyle: TextStyle(fontWeight: FontWeight.bold),
-              indicatorColor: AppPallete.tabColor,
-              labelColor: AppPallete.tabColor,
-              unselectedLabelColor: Colors.grey,
             ),
           ),
           body: BlocListener<CurrentUserCubit, CurrentUserState>(
@@ -109,19 +143,18 @@ class _UsersScreenState extends State<UsersScreen> {
               },
               builder: (BuildContext context, UsersBlocState state) {
                 if (state is UsersBlocLoading) {
-                  return LoadingIndicator();
+                  return const LoadingIndicator();
                 }
                 if (state is UsersBlocSuccess) {
                   return TabBarView(
                     children: [
-                      ContactList(newList: state.users),
+                      ContactList(list: state.users),
                       const Center(
                         child: Text(
                           "Status Screen",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 40,
-                            color: Colors.grey,
                           ),
                         ),
                       ),
@@ -131,14 +164,13 @@ class _UsersScreenState extends State<UsersScreen> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 40,
-                            color: Colors.grey,
                           ),
                         ),
                       ),
                     ],
                   );
                 }
-                return SizedBox();
+                return const SizedBox();
               },
             ),
           ),
@@ -146,11 +178,9 @@ class _UsersScreenState extends State<UsersScreen> {
             onPressed: () {
               ScaffoldMessenger.of(
                 context,
-              ).showSnackBar(SnackBar(content: Text("working")));
+              ).showSnackBar( const SnackBar(content: Text("working")));
             },
-            foregroundColor: Colors.white,
-            backgroundColor: AppPallete.tabColor,
-            child: Icon(Icons.comment, size: 30),
+            child: const Icon(Icons.comment, size: 30),
           ),
         ),
       ),

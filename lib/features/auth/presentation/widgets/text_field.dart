@@ -1,3 +1,4 @@
+import 'package:chat_app/core/theme/app_pallete.dart';
 import 'package:flutter/material.dart';
 
 class AuthTextField extends StatefulWidget {
@@ -26,17 +27,26 @@ class _AuthTextFieldState extends State<AuthTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      style:const TextStyle(
+        color: Colors.black
+      ),
       controller: widget.controller,
       obscureText: widget.isPasswordField ? obscure : false,
       decoration: InputDecoration(
-        prefixIcon: Icon(widget.icon),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: AppPallete.messageColor,width: 1.5)
+        ),
+        prefixIcon: Icon(widget.icon,color: Colors.black87,),
         labelText: widget.label,
+        labelStyle: const TextStyle(color: AppPallete.backgroundColor),
         suffixIcon: widget.isPasswordField
             ? IconButton(
           icon: Icon(
-            obscure
+            !obscure
                 ? Icons.visibility_off_outlined
                 : Icons.visibility_outlined,
+                color: Colors.black87,
           ),
           onPressed: () {
             setState(() {

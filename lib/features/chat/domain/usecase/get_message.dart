@@ -9,7 +9,8 @@ class GetMessages {
 
   GetMessages(this.repository);
 
-  Either<Failure,Stream<List<Message>>> call(String currentUserId, String receiverId){
-    return repository.getMessages(currentUserId, receiverId);
+  
+  Future<Either<Failure,Stream<List<Message>>>> call(String currentUserId, String receiverId)async{
+    return await repository.getMessages(currentUserId, receiverId);
   }
 }

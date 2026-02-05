@@ -13,21 +13,66 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Future.delayed(Duration(seconds: 3), () {
-    //   // ignore: use_build_context_synchronously
-    //   context.read<AuthBloc>().add(AuthGetCurrentUser());
-    // });
+    Future.delayed(const Duration(seconds: 3), () {
+    // ignore: use_build_context_synchronously
+    context.read<AuthBloc>().add(AuthGetCurrentUser());
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset('assets/images/backgroundImageW.png',fit: BoxFit.cover,),
-          Image.asset('assets/images/whatsapp-logo.png',alignment: AlignmentGeometry.center,scale: 2,),
-        ],
+      body: Container(
+        decoration: const BoxDecoration(color: Colors.white),
+        child: Stack(
+          children: [
+            Center(
+              child: Image.asset(
+                'assets/images/whatsapp_icon.png',
+                scale: 3,
+                alignment: Alignment.center,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const Text(
+                    "From",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                      fontSize: 30,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 40,
+                        width: 40,
+                        child: Image.asset(
+                          'assets/images/meta_temp.png',
+                          color: const Color.fromRGBO(12, 204, 102, 1),
+                        ),
+                      ),
+                      const Text(
+                        " Meta",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                          fontSize: 30,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -11,7 +11,7 @@ const info = [
     'message': 'Hello, whats up',
     'time': '2:25 pm',
     'profilePic':
-    'https://res.cloudinary.com/dvg3vkutf/image/upload/v1758732847/WhatsApp_Image_2025-08-07_at_15.22.24_d7f9e6c3_wtjvmz.jpg',
+    'https://res.cloudinary.com/dvg3vkutf/image/upload/v1754633605/images_gnjmpv_pbztsw.jpg',
   },
   {
     'name': 'Eleven',
@@ -25,7 +25,7 @@ const info = [
     'message': 'Call me, have some work',
     'time': '12:06 pm',
     'profilePic':
-    'https://pbs.twimg.com/profile_images/1419974913260232732/Cy_CUavB.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/3/30/David_Harbour_%2836172660586%29_%28cropped%29.jpg',
   },
   {
     'name': 'Mom',
@@ -60,7 +60,7 @@ const info = [
     'message': 'Lets Code!',
     'time': '4:56 am',
     'profilePic':
-    'https://images.unsplash.com/photo-1619194617062-5a61b9c6a049?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHJhbmRvbSUyMHBlb3BsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60',
+    'https://cdn.britannica.com/12/215012-050-19D71F2D/English-actor-Tom-Hiddleston-2018.jpg',
   },
   {
     'name': 'Ian Dooley',
