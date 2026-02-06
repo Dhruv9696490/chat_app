@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         height: 40,
                         width: 40,
                         child: Image.asset(
-                          'assets/images/meta_temp.png',
+                          'assets/images/meta_rpllli.png',
                           color: const Color.fromRGBO(12, 204, 102, 1),
                         ),
                       ),

@@ -3,6 +3,9 @@ import 'app_pallete.dart';
 
 class AppTheme {
   static get darkTheme => ThemeData.dark().copyWith(
+    popupMenuTheme: const PopupMenuThemeData(
+      color: AppPallete.backgroundColor
+    ),
     appBarTheme: const AppBarTheme(
       actionsIconTheme: IconThemeData(color: AppPallete.whiteColor),
       backgroundColor: AppPallete.appBarColor,
@@ -26,6 +29,7 @@ class AppTheme {
     ),
     scaffoldBackgroundColor: AppPallete.backgroundColor,
     inputDecorationTheme: const InputDecorationTheme(
+      fillColor: AppPallete.backgroundColor,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
@@ -35,7 +39,7 @@ class AppTheme {
         textStyle: const TextStyle(fontFamily: "Lato"),
         padding: const EdgeInsets.symmetric(vertical: 14),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        foregroundColor: Colors.white,
+        foregroundColor: AppPallete.whiteColor,
         elevation: 5,
       ),
     ),

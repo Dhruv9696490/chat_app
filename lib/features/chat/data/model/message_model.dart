@@ -7,25 +7,30 @@ class MessageModel extends Message {
     required super.receiverId,
     required super.text,
     required super.timestamp,
+    required super.isEdited,
   });
   Map<dynamic, dynamic> toJson() => {
     'senderId': senderId,
     'receiverId': receiverId,
     'text': text,
     'timestamp': timestamp.millisecondsSinceEpoch,
+    'isEdited': isEdited,
   };
-Map<dynamic, dynamic> toJsonForHive() => {
+  Map<dynamic, dynamic> toJsonForHive() => {
     'id': id,
     'senderId': senderId,
     'receiverId': receiverId,
     'text': text,
     'timestamp': timestamp.millisecondsSinceEpoch,
+    'isEdited': isEdited,
   };
-  factory MessageModel.fromJson(Map<dynamic, dynamic> map, String? id) => MessageModel(
-    id: id ?? map['id'] ?? '',
-    senderId: map['senderId'] ?? '',
-    receiverId: map['receiverId'] ?? '',
-    text: map['text'] ?? '',
-    timestamp: DateTime.fromMillisecondsSinceEpoch(map['timestamp']),
-  );
+  factory MessageModel.fromJson(Map<dynamic, dynamic> map, String? id) =>
+      MessageModel(
+        id: id ?? map['id'] ?? '',
+        senderId: map['senderId'] ?? '',
+        receiverId: map['receiverId'] ?? '',
+        text: map['text'] ?? '',
+        timestamp: DateTime.fromMillisecondsSinceEpoch(map['timestamp']),
+        isEdited: map['isEdited'] ?? false,
+      );
 }

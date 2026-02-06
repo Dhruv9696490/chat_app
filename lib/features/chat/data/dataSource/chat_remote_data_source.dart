@@ -10,11 +10,26 @@ abstract interface class ChatRemoteDataSource {
     String receiverId,
   );
   Future<void> deleteMessage(MessageModel message);
+  Future<void> updateMessage(MessageModel message);
 }
 
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   final FirebaseFirestore firestore;
   ChatRemoteDataSourceImpl(this.firestore);
+
+  @override
+  Future<void> updateMessage(MessageModel message) async{
+     try {
+      await firestore
+          .collection('chats')
+          .doc(_getChatId(message.senderId, message.receiverId))
+          .collection('messages')
+          .doc(message.id)
+          .update({'text': message.text,'isEdited': true});
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
 
   @override
   Future<void> deleteMessage(MessageModel message) async {

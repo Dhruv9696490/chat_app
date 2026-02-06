@@ -26,9 +26,6 @@ class ChatRepositoryImpl implements ChatRepository {
   ) async {
     try {
       if (!(await connectionChecker.isConnected())) {
-        print(
-          "offline //////////////||||||||||\\\\\\\\\\\\===========================",
-        );
         final list = await localDataSource.getAllMessage();
         if (list.isEmpty) {
           return left(Failure('No message found'));
@@ -39,20 +36,13 @@ class ChatRepositoryImpl implements ChatRepository {
               (item.senderId == currentUserId &&
                   item.receiverId == receiverId));
         }).toList();
-        print(
-          "${newList[0].text} offline //////////////||||||||||\\\\\\\\\\\\==============================",
-        );
         newList.sort((a, b) {
           return b.timestamp.compareTo(a.timestamp);
         });
         return right(Stream<List<Message>>.fromIterable([newList]));
-        // right(Stream.value(newList));
       }
       final res = remoteDataSource.getMessages(currentUserId, receiverId);
       localDataSource.uploadMessage(messages: await res.first);
-      print(
-        "${res.first.toString()} //////////////||||||||||\\\\\\\\\\\\==============================",
-      );
       return right(res);
     } on ServerException catch (e) {
       return left(Failure(e.error));
@@ -72,6 +62,7 @@ class ChatRepositoryImpl implements ChatRepository {
           receiverId: message.receiverId,
           text: message.text,
           timestamp: message.timestamp,
+          isEdited: message.isEdited,
         ),
       );
       return right(null);
@@ -79,10 +70,32 @@ class ChatRepositoryImpl implements ChatRepository {
       return left(Failure(e.error));
     }
   }
-  
+
   @override
-  Future<Either<Failure, void>> deleteMessage(Message message)async {
-     try {
+  Future<Either<Failure, void>> updateMessage(Message message) async {
+    try {
+      if (!(await connectionChecker.isConnected())) {
+        return left(Failure(Constant.offlineMessage));
+      }
+      await remoteDataSource.updateMessage(
+        MessageModel(
+          id: message.id,
+          senderId: message.senderId,
+          receiverId: message.receiverId,
+          text: message.text,
+          timestamp: message.timestamp,
+          isEdited: message.isEdited,
+        ),
+      );
+      return right(null);
+    } on ServerException catch (e) {
+      return left(Failure(e.error));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteMessage(Message message) async {
+    try {
       if (!(await connectionChecker.isConnected())) {
         return left(Failure(Constant.offlineMessage));
       }
@@ -93,6 +106,7 @@ class ChatRepositoryImpl implements ChatRepository {
           receiverId: message.receiverId,
           text: message.text,
           timestamp: message.timestamp,
+          isEdited: message.isEdited,
         ),
       );
       return right(null);

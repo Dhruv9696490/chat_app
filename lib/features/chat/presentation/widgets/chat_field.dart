@@ -23,73 +23,69 @@ class _ChatFieldState extends State<ChatField> {
     final fieldColor = isDark ? AppPallete.darkField : AppPallete.whiteColor;
     final iconColor = isDark ? Colors.grey[300] : Colors.grey[700];
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-          child: Row(
-            children: [
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: fieldColor,
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            _showEmoji = !_showEmoji;
-                          });
-                        },
-                        child: Icon(
-                          Icons.emoji_emotions_outlined,
-                          color: iconColor,
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: fieldColor,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          _showEmoji = !_showEmoji;
+                        });
+                      },
+                      child: Icon(
+                        Icons.emoji_emotions_outlined,
+                        color: iconColor,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: widget.controller,
+                        style: TextStyle(
+                          color: isDark
+                              ? AppPallete.whiteColor
+                              : AppPallete.blackColor,
+                        ),
+                        decoration: const InputDecoration(
+                          hintText: 'Message',
+                          border: InputBorder.none,
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: TextField(
-                          controller: widget.controller,
-                          style: TextStyle(
-                            color: isDark
-                                ? AppPallete.whiteColor
-                                : AppPallete.blackColor,
-                          ),
-                          decoration: const InputDecoration(
-                            hintText: 'Message',
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                      Icon(Icons.attach_file, color: iconColor),
-                      const SizedBox(width: 8),
-                      Icon(Icons.camera_alt, color: iconColor),
-                    ],
-                  ),
+                    ),
+                    Icon(Icons.attach_file, color: iconColor),
+                    const SizedBox(width: 8),
+                    Icon(Icons.camera_alt, color: iconColor),
+                  ],
                 ),
               ),
-              const SizedBox(width: 8),
-              CircleAvatar(
-                radius: 24,
-                backgroundColor: AppPallete.appBarColor,
-                child: IconButton(
-                  onPressed: widget.onSend,
-                  icon: const Icon(Icons.send, color: AppPallete.whiteColor),
-                ),
+            ),
+            const SizedBox(width: 8),
+            CircleAvatar(
+              radius: 24,
+              backgroundColor: AppPallete.appBarColor,
+              child: IconButton(
+                onPressed: widget.onSend,
+                icon: const Icon(Icons.send, color: AppPallete.whiteColor),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         Offstage(
           offstage: !_showEmoji,
           child: EmojiPicker(
             textEditingController: widget.controller,
             config: Config(
-              emojiTextStyle: const TextStyle(
-                color: Colors.red 
-              ),
+              emojiTextStyle: const TextStyle(color: Colors.red),
               height: 256,
               checkPlatformCompatibility: true,
               viewOrderConfig: const ViewOrderConfig(),
@@ -100,10 +96,24 @@ class _ChatFieldState extends State<ChatField> {
                         ? 1.2
                         : 1.0),
               ),
-              skinToneConfig:  SkinToneConfig(dialogBackgroundColor: fieldColor,indicatorColor: AppPallete.appBarColor,enabled: false ),
-              categoryViewConfig:  CategoryViewConfig(backgroundColor: fieldColor,dividerColor: AppPallete.appBarColor,indicatorColor:  AppPallete.appBarColor,iconColorSelected:  AppPallete.appBarColor),
-              bottomActionBarConfig:  const BottomActionBarConfig(enabled: false),
-              searchViewConfig:  SearchViewConfig(backgroundColor: fieldColor,buttonIconColor: AppPallete.appBarColor),
+              skinToneConfig: SkinToneConfig(
+                dialogBackgroundColor: fieldColor,
+                indicatorColor: AppPallete.appBarColor,
+                enabled: false,
+              ),
+              categoryViewConfig: CategoryViewConfig(
+                backgroundColor: fieldColor,
+                dividerColor: AppPallete.appBarColor,
+                indicatorColor: AppPallete.appBarColor,
+                iconColorSelected: AppPallete.appBarColor,
+              ),
+              bottomActionBarConfig: const BottomActionBarConfig(
+                enabled: false,
+              ),
+              searchViewConfig: SearchViewConfig(
+                backgroundColor: fieldColor,
+                buttonIconColor: AppPallete.appBarColor,
+              ),
             ),
           ),
         ),

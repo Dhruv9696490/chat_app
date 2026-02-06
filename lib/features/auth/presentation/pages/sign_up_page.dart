@@ -5,7 +5,9 @@ import 'package:chat_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chat_app/features/auth/presentation/pages/login_page.dart';
 import 'package:chat_app/features/auth/presentation/widgets/gradient_button.dart';
 import 'package:chat_app/features/auth/presentation/widgets/text_field.dart';
-import 'package:chat_app/features/users/presentation/pages/users_page.dart';
+import 'package:chat_app/features/users/presentation/layout/responsive_layout.dart';
+import 'package:chat_app/features/users/presentation/mobile_pages/users_page.dart';
+import 'package:chat_app/features/users/presentation/web_pages/web_users_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -46,7 +48,10 @@ class _SignUpPageState extends State<SignUpPage> {
               context,
               MaterialPageRoute(
                 builder: (_) {
-                  return UsersScreen(user: state.user);
+                  return ResponsiveLayout(
+                    mobile: UsersScreen(user: state.user),
+                    web: const WebUsersPage(),
+                  );
                 },
               ),
               (route) => false,
@@ -157,20 +162,26 @@ class _SignUpPageState extends State<SignUpPage> {
                             children: [
                               const Text(
                                 "Already have an account?",
-                                style: TextStyle(color: Colors.black,fontSize: 17),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 17,
+                                ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: GestureDetector(
-                                  onTap: ()=> Navigator.pushAndRemoveUntil(context, LoginPage.route(),(_)=> false),
-                                  child:const Text(
-                                      "Log In",
-                                      style: TextStyle(
-                                        color: AppPallete.messageColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 17,
-                                      ),
-                                   
+                                  onTap: () => Navigator.pushAndRemoveUntil(
+                                    context,
+                                    LoginPage.route(),
+                                    (_) => false,
+                                  ),
+                                  child: const Text(
+                                    "Log In",
+                                    style: TextStyle(
+                                      color: AppPallete.messageColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17,
+                                    ),
                                   ),
                                 ),
                               ),

@@ -3,10 +3,14 @@ import 'package:chat_app/core/cubit/currentUser/current_user_cubit.dart';
 import 'package:chat_app/core/theme/app_theme.dart';
 import 'package:chat_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chat_app/features/auth/presentation/pages/login_page.dart';
-import 'package:chat_app/features/chat/presentation/bloc/chat_bloc.dart';
+import 'package:chat_app/features/chat/presentation/bloc/chat/chat_bloc.dart';
+import 'package:chat_app/features/chat/presentation/bloc/selected_message/selected_cubit.dart';
 import 'package:chat_app/features/splash/presentation/splash_screen.dart';
-import 'package:chat_app/features/users/presentation/bloc/bloc/users_bloc.dart';
-import 'package:chat_app/features/users/presentation/pages/users_page.dart';
+import 'package:chat_app/features/users/presentation/bloc/user_bloc/users_bloc.dart';
+import 'package:chat_app/features/users/presentation/bloc/web_chat/web_chat_cubit.dart';
+import 'package:chat_app/features/users/presentation/layout/responsive_layout.dart';
+import 'package:chat_app/features/users/presentation/mobile_pages/users_page.dart';
+import 'package:chat_app/features/users/presentation/web_pages/web_users_page.dart';
 import 'package:chat_app/firebase_options.dart';
 import 'package:chat_app/injection_container.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,6 +27,16 @@ void main() async {
         BlocProvider(
           create: (_) {
             return getIt<AuthBloc>();
+          },
+        ),
+        BlocProvider(
+          create: (_) {
+            return getIt<WebChatCubit>();
+          },
+        ),
+        BlocProvider(
+          create: (_) {
+            return getIt<SelectedCubit>();
           },
         ),
         BlocProvider(
@@ -46,7 +60,7 @@ void main() async {
           },
         ),
       ],
-      child:const MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -72,7 +86,12 @@ class MyApp extends StatelessWidget {
               if (state is AuthSuccess) {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  UsersScreen.route(state.user),
+                  MaterialPageRoute(
+                    builder: (_) => ResponsiveLayout(
+                      mobile: UsersScreen(user: state.user),
+                      web: const WebUsersPage(),
+                    ),
+                  ),
                   (_) => false,
                 );
               }

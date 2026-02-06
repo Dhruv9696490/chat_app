@@ -3,13 +3,15 @@ import 'package:chat_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chat_app/features/auth/presentation/pages/sign_up_page.dart';
 import 'package:chat_app/features/auth/presentation/widgets/gradient_button.dart';
 import 'package:chat_app/features/auth/presentation/widgets/text_field.dart';
+import 'package:chat_app/features/users/presentation/layout/responsive_layout.dart';
+import 'package:chat_app/features/users/presentation/web_pages/web_users_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/utils/loading_indicator.dart';
 import '../../../../core/utils/snack_bar.dart';
-import '../../../users/presentation/pages/users_page.dart';
+import '../../../users/presentation/mobile_pages/users_page.dart';
 
 class LoginPage extends StatefulWidget {
   static route() => MaterialPageRoute(
@@ -46,7 +48,10 @@ class _LoginPageState extends State<LoginPage> {
               context,
               MaterialPageRoute(
                 builder: (_) {
-                  return UsersScreen(user: state.user);
+                  return ResponsiveLayout(
+                    mobile: UsersScreen(user: state.user),
+                    web: const WebUsersPage(),
+                  );
                 },
               ),
               (_) => false,
@@ -80,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                   vertical: 24,
                 ),
                 child: ConstrainedBox(
-                  constraints:const BoxConstraints(maxWidth: 500),
+                  constraints: const BoxConstraints(maxWidth: 500),
                   child: Card(
                     color: const Color.fromRGBO(237, 236, 236, 1),
                     elevation: 16,
@@ -154,20 +159,26 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               const Text(
                                 "Don't have an account?",
-                                style: TextStyle(color: Colors.black,fontSize: 17),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 17,
+                                ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: GestureDetector(
-                                  onTap: ()=> Navigator.pushAndRemoveUntil(context, SignUpPage.route(),(_)=> false),
+                                  onTap: () => Navigator.pushAndRemoveUntil(
+                                    context,
+                                    SignUpPage.route(),
+                                    (_) => false,
+                                  ),
                                   child: const Text(
-                                      "Sign Up",
-                                      style: TextStyle(
-                                        color: AppPallete.messageColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 17,
-                                      ),
-                                   
+                                    "Sign Up",
+                                    style: TextStyle(
+                                      color: AppPallete.messageColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17,
+                                    ),
                                   ),
                                 ),
                               ),
