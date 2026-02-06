@@ -40,8 +40,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<GetMessagesEvent>((event, emit) async {
       emit(ChatLoading());
       final stream = await _getMessages(event.currentUserId, event.receiverId);
-      stream.fold((l) => emit(ChatError(l.error)), (r) {
-        emit.forEach(r, onData: (messages) => ChatLoaded(messages));
+      stream.fold((l) => emit(ChatError(l.error)), (r) async{
+        await emit.forEach(r, onData: (messages) => ChatLoaded(messages));
       });
     });
   }

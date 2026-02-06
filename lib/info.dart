@@ -51,7 +51,7 @@ const info = [
     'message': 'Lets Code!',
     'time': '4:56 am',
     'profilePic':
-    'https://cdn.britannica.com/12/215012-050-19D71F2D/English-actor-Tom-Hiddleston-2018.jpg',
+    'https://res.cloudinary.com/dvg3vkutf/image/upload/v1770382037/English-actor-Tom-Hiddleston-2018_puramf.jpg',
   },
   {
     'message': 'Images by Unsplash',
