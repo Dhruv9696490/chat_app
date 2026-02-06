@@ -78,7 +78,12 @@ class AuthRemoteDataSourceImple implements AuthRemoteDataSource {
 
   @override
   Future<void> signOut() async {
-    await auth.signOut();
+    try {
+       await auth.signOut();
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+   
   }
 
   @override

@@ -49,222 +49,211 @@ class _WebUsersPageState extends State<WebUsersPage> {
         }
       },
       child: Scaffold(
-        body: BlocListener<CurrentUserCubit, CurrentUserState>(
+        body: BlocConsumer<UsersBloc, UsersBlocState>(
           listener: (context, state) {
-            if (state is CurrentUserLoggedOut) {
-              Navigator.pushAndRemoveUntil(
-                context,
-                LoginPage.route(),
-                (_) => false,
-              );
+            if (state is UsersBlocFailure) {
+              showSnackBar(context, state.message);
             }
           },
-          child: BlocConsumer<UsersBloc, UsersBlocState>(
-            listener: (context, state) {
-              if (state is UsersBlocFailure) {
-                showSnackBar(context, state.message);
-              }
-            },
-            builder: (BuildContext context, UsersBlocState state) {
-              if (state is UsersBlocLoading) {
-                return const LoadingIndicator();
-              }
-              if (state is UsersBlocSuccess) {
-                final newList = state.users.where((element) {
-                  return element.name.toLowerCase().contains(
-                    controller.text.trim().toLowerCase(),
-                  );
-                }).toList();
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Container(
-                            decoration: const BoxDecoration(
-                              color: AppPallete.appBarColor,
-                            ),
-                            height: 70,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "  WhatsApp",
-                                  style: TextStyle(
-                                    fontFamily: 'Lato',
-                                    color: AppPallete.whiteColor,
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+          builder: (BuildContext context, UsersBlocState state) {
+            if (state is UsersBlocLoading) {
+              return const LoadingIndicator();
+            }
+            if (state is UsersBlocSuccess) {
+              final newList = state.users.where((element) {
+                return element.name.toLowerCase().contains(
+                  controller.text.trim().toLowerCase(),
+                );
+              }).toList();
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Container(
+                          decoration: const BoxDecoration(
+                            color: AppPallete.appBarColor,
+                          ),
+                          height: 70,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "  WhatsApp",
+                                style: TextStyle(
+                                  fontFamily: 'Lato',
+                                  color: AppPallete.whiteColor,
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.w600,
                                 ),
-                                isSearch
-                                    ? Expanded(
-                                        child: Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Container(
-                                            constraints: const BoxConstraints(
-                                              maxWidth: 400,
-                                            ),
-                                            height: 45,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    vertical: 0,
-                                                    horizontal: 8,
+                              ),
+                              isSearch
+                                  ? Expanded(
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Container(
+                                          constraints: const BoxConstraints(
+                                            maxWidth: 400,
+                                          ),
+                                          height: 45,
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.symmetric(
+                                                  vertical: 0,
+                                                  horizontal: 8,
+                                                ),
+                                            child: TextField(
+                                              controller: controller,
+                                              autofocus: true,
+                                              decoration: InputDecoration(
+                                                hintText: 'Search',
+                                                prefixIcon: GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {});
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.search,
+                                                    size: 20,
                                                   ),
-                                              child: TextField(
-                                                controller: controller,
-                                                autofocus: true,
-                                                decoration: InputDecoration(
-                                                  hintText: 'Search',
-                                                  prefixIcon: GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {});
-                                                    },
-                                                    child: const Icon(
-                                                      Icons.search,
-                                                      size: 20,
+                                                ),
+                                                filled: true,
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                      vertical: 0,
                                                     ),
-                                                  ),
-                                                  filled: true,
-                                                  contentPadding:
-                                                      const EdgeInsets.symmetric(
-                                                        vertical: 0,
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                        20,
                                                       ),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          20,
-                                                        ),
-                                                    borderSide: BorderSide.none,
-                                                  ),
+                                                  borderSide: BorderSide.none,
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      )
-                                    : const Spacer(),
-                                IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      isSearch = !isSearch;
-                                      controller.clear();
-                                    });
-                                  },
-                                  icon: Icon(
-                                    isSearch ? Icons.close : Icons.search,
-                                    color: AppPallete.whiteColor,
-                                    size: isSearch ? 30 : 25,
-                                  ),
+                                      ),
+                                    )
+                                  : const Spacer(),
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isSearch = !isSearch;
+                                    controller.clear();
+                                  });
+                                },
+                                icon: Icon(
+                                  isSearch ? Icons.close : Icons.search,
+                                  color: AppPallete.whiteColor,
+                                  size: isSearch ? 30 : 25,
                                 ),
-                                PopupMenuButton(
-                                  iconSize: 25,
-                                  iconColor: AppPallete.whiteColor,
-                                  menuPadding: const EdgeInsets.all(0),
-                                  onSelected: (value) {
-                                    if (value == 'LOGOUT') {
-                                      context.read<AuthBloc>().add(
-                                        AuthSignOut(),
-                                      );
-                                    }
-                                    if (value == 'THEME') {
-                                      context.read<ThemeCubit>().changeTheme();
-                                    }
-                                  },
-                                  itemBuilder: (context) {
-                                    return [
-                                      const PopupMenuItem(
-                                        value: 'SETTING',
-                                        child: Row(
-                                          children: [
-                                            Icon(Icons.settings),
-                                            SizedBox(width: 8),
-                                            Text("Setting"),
-                                          ],
-                                        ),
+                              ),
+                              PopupMenuButton(
+                                iconSize: 25,
+                                iconColor: AppPallete.whiteColor,
+                                menuPadding: const EdgeInsets.all(0),
+                                onSelected: (value) {
+                                  if (value == 'LOGOUT') {
+                                    context.read<AuthBloc>().add(
+                                      AuthSignOut(),
+                                    );
+                                  }
+                                  if (value == 'THEME') {
+                                    context.read<ThemeCubit>().changeTheme();
+                                  }
+                                },
+                                itemBuilder: (context) {
+                                  return [
+                                    const PopupMenuItem(
+                                      value: 'SETTING',
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.settings),
+                                          SizedBox(width: 8),
+                                          Text("Setting"),
+                                        ],
                                       ),
-                                      PopupMenuItem(
-                                        value: 'THEME',
-                                        child: Row(
-                                          children: [
-                                            !isDark
-                                                ? const Icon(
-                                                    Icons.dark_mode_outlined,
-                                                  )
-                                                : const Icon(Icons.sunny),
-                                            const SizedBox(width: 8),
-                                            !isDark
-                                                ? const Text("Dark Mode")
-                                                : const Text("Light Mode"),
-                                          ],
-                                        ),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'THEME',
+                                      child: Row(
+                                        children: [
+                                          !isDark
+                                              ? const Icon(
+                                                  Icons.dark_mode_outlined,
+                                                )
+                                              : const Icon(Icons.sunny),
+                                          const SizedBox(width: 8),
+                                          !isDark
+                                              ? const Text("Dark Mode")
+                                              : const Text("Light Mode"),
+                                        ],
                                       ),
-                                      const PopupMenuItem(
-                                        value: 'LOGOUT',
-                                        child: Row(
-                                          children: [
-                                            Icon(Icons.logout),
-                                            SizedBox(width: 8),
-                                            Text("Logout"),
-                                          ],
-                                        ),
+                                    ),
+                                    const PopupMenuItem(
+                                      value: 'LOGOUT',
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.logout),
+                                          SizedBox(width: 8),
+                                          Text("Logout"),
+                                        ],
                                       ),
-                                    ];
-                                  },
-                                ),
-                              ],
-                            ),
+                                    ),
+                                  ];
+                                },
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            child: ContactList(
-                              list: newList,
-                            ),
+                        ),
+                        Expanded(
+                          child: ContactList(
+                            list: newList,
                           ),
-                        ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.70,
+                    decoration: BoxDecoration(
+                      border: const Border(
+                        left: BorderSide(color: AppPallete.dividerColor),
+                      ),
+                      image: DecorationImage(
+                        image: isDark
+                            ? const AssetImage(
+                                'assets/images/whatsapp_black_background.png',
+                              )
+                            : const AssetImage(
+                                'assets/images/whatsapp_white_background.png',
+                              ),
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.70,
-                      decoration: BoxDecoration(
-                        border: const Border(
-                          left: BorderSide(color: AppPallete.dividerColor),
-                        ),
-                        image: DecorationImage(
-                          image: isDark
-                              ? const AssetImage(
-                                  'assets/images/whatsapp_black_background.png',
-                                )
-                              : const AssetImage(
-                                  'assets/images/whatsapp_white_background.png',
+                    child: (webChat.state == null)
+                        ? null
+                        : Column(
+                            children: [
+                              Expanded(
+                                child: ChatPage(
+                                  key: ValueKey(webChat.state!.receiverId),
+                                  currentUserId: webChat.state!.currentUserId,
+                                  receiverId: webChat.state!.receiverId,
+                                  receiverName: webChat.state!.receiverName,
+                                  user: webChat.state!.user,
+                                  url: webChat.state!.url, isMobileView: false,
                                 ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: (webChat.state == null)
-                          ? null
-                          : Column(
-                              children: [
-                                Expanded(
-                                  child: ChatPage(
-                                    key: ValueKey(webChat.state!.receiverId),
-                                    currentUserId: webChat.state!.currentUserId,
-                                    receiverId: webChat.state!.receiverId,
-                                    receiverName: webChat.state!.receiverName,
-                                    user: webChat.state!.user,
-                                    url: webChat.state!.url, isMobileView: false,
-                                  ),
-                                ),
-                              ],
-                            ),
-                    ),
-                  ],
-                );
-              }
-              return const SizedBox();
-            },
-          ),
+                              ),
+                            ],
+                          ),
+                  ),
+                ],
+              );
+            }
+            return const SizedBox();
+          },
         ),
       ),
     );

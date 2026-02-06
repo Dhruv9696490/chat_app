@@ -22,8 +22,6 @@ class ProfileImageView extends StatelessWidget {
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Container(color: Colors.transparent),
           ),
-
-          // 🔹 Sharp circular image
           Center(
             child: Hero(
               tag: tag,
